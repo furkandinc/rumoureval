@@ -100,11 +100,11 @@ def import_thread(folder):
     thread = {}
 
     if os.path.exists(os.path.join(folder, 'structure.json')):
-        with open(os.path.join(folder, 'structure.json')) as structure:
+        with open(os.path.join(folder, 'structure.json'), encoding="utf8") as structure:
             thread['structure'] = json.load(structure)
 
     if os.path.exists(os.path.join(folder, 'urls.dat')):
-        with open(os.path.join(folder, 'urls.dat')) as url_dat:
+        with open(os.path.join(folder, 'urls.dat'), encoding="utf8") as url_dat:
             thread['urls'] = []
             for line in url_dat.readlines():
                 raw_url = line.split()
@@ -117,18 +117,18 @@ def import_thread(folder):
 
     if os.path.exists(os.path.join(folder, 'source-tweet')):
         for child in os.listdir(os.path.join(folder, 'source-tweet')):
-            with open(os.path.join(folder, 'source-tweet', child)) as source_tweet:
+            with open(os.path.join(folder, 'source-tweet', child), encoding="utf8") as source_tweet:
                 thread['source'] = json.load(source_tweet)
 
     thread['replies'] = {}
     if os.path.exists(os.path.join(folder, 'replies')):
         for child in os.listdir(os.path.join(folder, 'replies')):
-            with open(os.path.join(folder, 'replies', child)) as reply_tweet_file:
+            with open(os.path.join(folder, 'replies', child), encoding="utf8") as reply_tweet_file:
                 reply_tweet = json.load(reply_tweet_file)
                 thread['replies'][reply_tweet['id_str']] = reply_tweet
 
     if os.path.exists(os.path.join(folder, 'context', 'wikipedia')):
-        with open(os.path.join(folder, 'context', 'wikipedia')) as wiki:
+        with open(os.path.join(folder, 'context', 'wikipedia'), encoding="utf8") as wiki:
             thread['wiki'] = wiki.read()
     else:
         thread['context/wiki'] = None
@@ -139,7 +139,7 @@ def import_thread(folder):
             context_file_path = os.path.join(folder, 'context', 'urls', child)
             if magic.from_file(context_file_path, mime=True) != 'text/html':
                 continue
-            with open(context_file_path) as url_context:
+            with open(context_file_path, encoding="utf8") as url_context:
                 thread['context/urls'][child] = url_context.read()
     else:
         thread['context/urls'] = None
@@ -147,7 +147,7 @@ def import_thread(folder):
     if os.path.exists(os.path.join(folder, 'urls-content')):
         thread['urls-content'] = {}
         for child in os.listdir(os.path.join(folder, 'urls-content')):
-            with open(os.path.join(folder, 'urls-content', child)) as url_content:
+            with open(os.path.join(folder, 'urls-content', child), encoding="utf8") as url_content:
                 thread['urls-content'][child] = url_content.read()
     else:
         thread['urls-content'] = None
@@ -203,10 +203,10 @@ def import_annotation_data(datasource):
     task_a_annotations = {}
     task_b_annotations = {}
     with open(os.path.join(get_datasource_path(datasource, annotations=True),
-                           'subtaskA.json')) as annotation_json:
+                           'subtaskA.json'), encoding="utf8") as annotation_json:
         task_a_annotations = json.load(annotation_json)
     with open(os.path.join(get_datasource_path(datasource, annotations=True),
-                           'subtaskB.json')) as annotation_json:
+                           'subtaskB.json'), encoding="utf8") as annotation_json:
         task_b_annotations = json.load(annotation_json)
     return task_a_annotations, task_b_annotations
 
@@ -328,11 +328,11 @@ def output_data_by_class(tweets, annotations, task, prefix=None):
             len(sorted_tweets[annotation]) / len(tweets)
             ))
         filename = ('{0}_{1}.json' if prefix is not None else '{1}.json').format(prefix, annotation)
-        with open(os.path.join(get_output_path(), filename), 'w') as file:
+        with open(os.path.join(get_output_path(), filename), 'w', encoding="utf8") as file:
             json.dump(sorted_tweets[annotation], file, sort_keys=True, indent=2)
         if task == 'B':
             filename = '{0}_dict.txt'.format(annotation)
-            with open(os.path.join(get_output_path(), filename), 'w') as file:
+            with open(os.path.join(get_output_path(), filename), 'w', encoding="utf8") as file:
                 file.write('\n'.join(sorted(list(sorted_tweet_text[annotation]))))
 
 
