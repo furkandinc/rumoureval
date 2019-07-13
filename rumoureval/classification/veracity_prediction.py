@@ -46,7 +46,7 @@ def filter_tweets(tweets, annotations):
     return filtered_tweets
 
 
-def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annotations, task_a_results, plot):
+def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annotations, task_a_results, plot,all_tweets):
     """
     Predict the veracity of tweets.
 
@@ -87,7 +87,7 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
     LOGGER.info('Initializing pipeline')
     pipeline = Pipeline([
         # Extract useful features from tweets
-        ('extract_tweets', TweetDetailExtractor(task='B', strip_hashtags=False, strip_mentions=False, classifications=task_a_results)),
+        ('extract_tweets', TweetDetailExtractor(task='B', strip_hashtags=False, strip_mentions=False, classifications=task_a_results,all_tweets=all_tweets)),
 
         # Combine processing of features
         ('union', FeatureUnion(
@@ -132,6 +132,45 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                     ('vect', DictVectorizer()),
                 ])),
 
+                #('follower_count',Pipeline([
+                #    ('selector',ItemSelector(keys ='follower_count')),
+                #    ('count', FeatureCounter(names ='follower_count')),
+                #    ('vect',DictVectorizer()),
+                #])),
+
+               #('favorite_count', Pipeline([
+               #    ('selector', ItemSelector(keys='favorite_count')),
+               #    ('count', FeatureCounter(names='favorite_count')),
+               #    ('vect', DictVectorizer()),
+               #])),
+
+                ('deny_fav_sum', Pipeline([
+                    ('selector', ItemSelector(keys='deny_fav_sum')),
+                    ('count', FeatureCounter(names='deny_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('support_fav_sum', Pipeline([
+                    ('selector', ItemSelector(keys='support_fav_sum')),
+                    ('count', FeatureCounter(names='support_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('query_fav_sum', Pipeline([
+                    ('selector', ItemSelector(keys='query_fav_sum')),
+                    ('count', FeatureCounter(names='query_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('comment_fav_sum', Pipeline([
+                    ('selector', ItemSelector(keys='comment_fav_sum')),
+                    ('count', FeatureCounter(names='comment_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+
+
+
                 # Boolean features
                 ('verified', Pipeline([
                     ('selector', ItemSelector(keys='verified')),
@@ -167,11 +206,17 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                 # Count features
                 'number_count': 1.0,
                 'count_chars': 1.0,
+                #'follower_count': 1.0,
+                #'favorite_count':1.0,
 
                 # Boolean features
                 'verified': 1.0,
                 'is_root': 1.5,
                 'has_url': 1.0,
+                'deny_fav_sum':1.0,
+                'query_fav_sum':1.0,
+                'comment_fav_sum':1.0,
+                'support_fav_sum':1.0,
 
             },
         )),

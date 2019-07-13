@@ -55,10 +55,11 @@ TWEET_DETAILS = [
     # Basic features
     ('hashtags', list),
     ('user_mentions', list),
-    ('favorite_count', int),
+    #('favorite_count', int),
     ('depth', int),
     ('retweet_count', int),
     ('account_age', int),
+    #('follower_count', int),
 
     # Sentimental analysis
     ('positive_words', list),
@@ -76,6 +77,7 @@ TWEET_DETAILS = [
     ('char_count', int),
     ('number_count', int),
 
+
     # Child tweet properties
     ('child_denies', int),
     ('child_queries', int),
@@ -86,19 +88,24 @@ TWEET_DETAILS = [
     ('support_percentage', float),
     ('denies_percentage', float),
     ('queries_percentage', float),
+    ('deny_fav_sum', int),
+    ('query_fav_sum', int),
+    ('comment_fav_sum', int),
+    ('support_fav_sum', int),
 ]
 
 class TweetDetailExtractor(BaseEstimator, TransformerMixin):
     """Extract relevant details from tweets."""
     # pylint:disable=C0103,W0613,R0201
 
-    def __init__(self, task='A', strip_hashtags=False, strip_mentions=False, classifications=None):
+    def __init__(self, task='A', strip_hashtags=False, strip_mentions=False, classifications=None,all_tweets=None):
         """Initialize stemmer and tokenizer."""
         self._task = task
         self._tokenizer = TweetTokenizer(preserve_case=False, reduce_len=True, strip_handles=True)
         self._strip_hashtags = strip_hashtags
         self._strip_mentions = strip_mentions
         self._classifications = classifications
+        self._tweets=all_tweets
 
 
     def get_params(self, deep=True):
@@ -257,7 +264,6 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                 properties['user_mentions'] = tweet['entities']['user_mentions']  if 'entities' in tweet else tweet['user_mentions']
                 properties['retweet_count'] = tweet['retweet_count'] if 'retweet_count' in tweet else 0
                 properties['has_url'] = 1 if URLS_RE.match(tweet['text']) else -1
-                properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
 
                 account_created_at = dateutil.parser.parse(tweet['user']['created_at'])
                 tweet_created_at = dateutil.parser.parse(tweet['created_at'])
@@ -327,25 +333,36 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                 properties['personal_words'] = [
                     word for word in stemmed if word in STEMMED_LEXICON['personal']
                     ]
-
+                properties['deny_fav_sum'] = 0
+                properties['query_fav_sum'] = 0
+                properties['support_fav_sum'] = 0
+                properties['comment_fav_sum'] = 0
                 if self._task == 'B':
-                    properties['child_denies'] = len([
-                        tweet for tweet in self._classifications if self._classifications[tweet] == 'deny'
-                    ])
-                    properties['child_queries'] = len([
-                        tweet for tweet in self._classifications if self._classifications[tweet] == 'query'
-                    ])
-                    properties['child_comments'] = len([
-                        tweet for tweet in self._classifications if self._classifications[tweet] == 'comment'
-                    ])
-                    properties['child_supports'] = len([
-                        tweet for tweet in self._classifications if self._classifications[tweet] == 'support'
-                    ])
+                    denies = [tweet for tweet in self._classifications if self._classifications[tweet] == 'deny']
+                    queries = [tweet for tweet in self._classifications if self._classifications[tweet] == 'query']
+                    comments = [tweet for tweet in self._classifications if self._classifications[tweet] == 'comment']
+                    supports = [tweet for tweet in self._classifications if self._classifications[tweet] == 'support']
+                    properties['child_denies'] = len(denies)
+                    properties['child_queries'] = len(queries)
+                    properties['child_comments'] = len(comments)
+                    properties['child_supports'] = len(supports)
+
+                    for twit in denies:
+                        properties['deny_fav_sum'] += self._tweets[twit]['favorite_count']
+                    for twit in queries:
+                        properties['query_fav_sum'] +=  self._tweets[twit]['favorite_count']
+                    for twit in supports:
+                        properties['support_fav_sum'] +=  self._tweets[twit]['favorite_count']
+                    for twit in comments:
+                        properties['comment_fav_sum'] +=  self._tweets[twit]['favorite_count']
 
                     total_sdq_tweets = properties['child_supports'] + properties['child_denies'] + properties['child_queries']
                     properties['support_percentage'] = properties['child_supports'] / total_sdq_tweets
                     properties['denies_percentage'] = properties['child_denies'] / total_sdq_tweets
                     properties['queries_percentage'] = properties['child_queries'] / total_sdq_tweets
+                    #properties['follower_count'] = tweet['user']['followers_count'] if 'user' in tweet else 0
+                    #properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
+
                 else:
                     properties['child_denies'] = 0
                     properties['child_queries'] = 0
@@ -354,6 +371,9 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                     properties['support_percentage'] = 0
                     properties['denies_percentage'] = 0
                     properties['queries_percentage'] = 0
+                    #properties['follower_count'] = 0
+                    #properties['favorite_count'] = 0
+
 
             for detail in TWEET_DETAILS:
                 features[detail[0]][i] = properties[detail[0]]
