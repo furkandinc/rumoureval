@@ -92,6 +92,10 @@ TWEET_DETAILS = [
     ('query_fav_sum', int),
     ('comment_fav_sum', int),
     ('support_fav_sum', int),
+    ('deny_rt_sum', int),
+    ('query_rt_sum', int),
+    ('comment_rt_sum', int),
+    ('support_rt_sum', int),
 ]
 
 class TweetDetailExtractor(BaseEstimator, TransformerMixin):
@@ -338,6 +342,10 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                 properties['query_fav_sum'] = 0
                 properties['support_fav_sum'] = 0
                 properties['comment_fav_sum'] = 0
+                properties['deny_rt_sum'] = 0
+                properties['query_rt_sum'] = 0
+                properties['support_rt_sum'] = 0
+                properties['comment_rt_sum'] = 0
 
                 if self._task == 'B':
                     denies = [tweet for tweet in self._classifications if self._classifications[tweet] == 'deny']
@@ -351,12 +359,17 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
 
                     for twit in denies:
                         properties['deny_fav_sum'] += self._tweets[twit]['favorite_count']
+                        properties['deny_rt_sum'] += self._tweets[twit]['retweet_count']
                     for twit in queries:
                         properties['query_fav_sum'] +=  self._tweets[twit]['favorite_count']
+                        properties['query_rt_sum'] += self._tweets[twit]['retweet_count']
                     for twit in supports:
                         properties['support_fav_sum'] +=  self._tweets[twit]['favorite_count']
+                        properties['support_rt_sum'] += self._tweets[twit]['retweet_count']
                     for twit in comments:
                         properties['comment_fav_sum'] +=  self._tweets[twit]['favorite_count']
+                        properties['comment_rt_sum'] += self._tweets[twit]['retweet_count']
+
 
                     total_sdq_tweets = properties['child_supports'] + properties['child_denies'] + properties['child_queries']
                     properties['support_percentage'] = properties['child_supports'] / total_sdq_tweets
@@ -378,6 +391,10 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                     properties['support_fav_sum'] = 0
                     properties['query_fav_sum'] = 0
                     properties['deny_fav_sum'] = 0
+                    properties['comment_rt_sum'] = 0
+                    properties['support_rt_sum'] = 0
+                    properties['query_rt_sum'] = 0
+                    properties['deny_rt_sum'] = 0
                     properties['follower_count'] = 0
 
 

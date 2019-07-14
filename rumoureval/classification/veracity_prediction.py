@@ -168,6 +168,30 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                     ('vect', DictVectorizer()),
                 ])),
 
+                ('comment_rt_sum', Pipeline([
+                    ('selector', ItemSelector(keys='comment_rt_sum')),
+                    ('count', FeatureCounter(names='comment_rt_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('query_rt_sum', Pipeline([
+                    ('selector', ItemSelector(keys='query_rt_sum')),
+                    ('count', FeatureCounter(names='query_rt_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('deny_rt_sum', Pipeline([
+                    ('selector', ItemSelector(keys='deny_rt_sum')),
+                    ('count', FeatureCounter(names='deny_rt_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('support_rt_sum', Pipeline([
+                    ('selector', ItemSelector(keys='support_rt_sum')),
+                    ('count', FeatureCounter(names='support_rt_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
                 ('retweet_count', Pipeline([
                     ('selector', ItemSelector(keys='retweet_count')),
                     ('count', FeatureCounter(names='retweet_count')),
@@ -224,6 +248,10 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                 'query_fav_sum':1.0,
                 'comment_fav_sum':1.0,
                 'support_fav_sum':1.0,
+                'deny_rt_sum': 1.0,
+                'query_rt_sum': 1.0,
+                'comment_rt_sum': 1.0,
+                'support_rt_sum': 1.0,
 
             },
         )),
