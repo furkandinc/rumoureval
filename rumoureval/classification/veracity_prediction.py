@@ -132,17 +132,17 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                     ('vect', DictVectorizer()),
                 ])),
 
-                #('follower_count',Pipeline([
-                #    ('selector',ItemSelector(keys ='follower_count')),
-                #    ('count', FeatureCounter(names ='follower_count')),
-                #    ('vect',DictVectorizer()),
-                #])),
+                ('follower_count',Pipeline([
+                    ('selector',ItemSelector(keys ='follower_count')),
+                    ('count', FeatureCounter(names ='follower_count')),
+                    ('vect',DictVectorizer()),
+                ])),
 
-               #('favorite_count', Pipeline([
-               #    ('selector', ItemSelector(keys='favorite_count')),
-               #    ('count', FeatureCounter(names='favorite_count')),
-               #    ('vect', DictVectorizer()),
-               #])),
+                ('favorite_count', Pipeline([
+                    ('selector', ItemSelector(keys='favorite_count')),
+                    ('count', FeatureCounter(names='favorite_count')),
+                    ('vect', DictVectorizer()),
+                ])),
 
                 ('deny_fav_sum', Pipeline([
                     ('selector', ItemSelector(keys='deny_fav_sum')),
@@ -165,6 +165,12 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                 ('comment_fav_sum', Pipeline([
                     ('selector', ItemSelector(keys='comment_fav_sum')),
                     ('count', FeatureCounter(names='comment_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('retweet_count', Pipeline([
+                    ('selector', ItemSelector(keys='retweet_count')),
+                    ('count', FeatureCounter(names='retweet_count')),
                     ('vect', DictVectorizer()),
                 ])),
 
@@ -206,8 +212,9 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                 # Count features
                 'number_count': 1.0,
                 'count_chars': 1.0,
-                #'follower_count': 1.0,
-                #'favorite_count':1.0,
+                'follower_count': 1.0,
+                'favorite_count':1.0,
+                'retweet_count':1.0,
 
                 # Boolean features
                 'verified': 1.0,

@@ -55,11 +55,11 @@ TWEET_DETAILS = [
     # Basic features
     ('hashtags', list),
     ('user_mentions', list),
-    #('favorite_count', int),
+    ('favorite_count', int),
     ('depth', int),
     ('retweet_count', int),
     ('account_age', int),
-    #('follower_count', int),
+    ('follower_count', int),
 
     # Sentimental analysis
     ('positive_words', list),
@@ -264,6 +264,7 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                 properties['user_mentions'] = tweet['entities']['user_mentions']  if 'entities' in tweet else tweet['user_mentions']
                 properties['retweet_count'] = tweet['retweet_count'] if 'retweet_count' in tweet else 0
                 properties['has_url'] = 1 if URLS_RE.match(tweet['text']) else -1
+                properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
 
                 account_created_at = dateutil.parser.parse(tweet['user']['created_at'])
                 tweet_created_at = dateutil.parser.parse(tweet['created_at'])
@@ -337,6 +338,7 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                 properties['query_fav_sum'] = 0
                 properties['support_fav_sum'] = 0
                 properties['comment_fav_sum'] = 0
+
                 if self._task == 'B':
                     denies = [tweet for tweet in self._classifications if self._classifications[tweet] == 'deny']
                     queries = [tweet for tweet in self._classifications if self._classifications[tweet] == 'query']
@@ -360,8 +362,9 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                     properties['support_percentage'] = properties['child_supports'] / total_sdq_tweets
                     properties['denies_percentage'] = properties['child_denies'] / total_sdq_tweets
                     properties['queries_percentage'] = properties['child_queries'] / total_sdq_tweets
-                    #properties['follower_count'] = tweet['user']['followers_count'] if 'user' in tweet else 0
-                    #properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
+                    properties['retweet_count'] = tweet['retweet_count'] if 'retweet_count' in tweet else 0
+                    properties['follower_count'] = tweet['user']['followers_count'] if 'user' in tweet else 0
+                    properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
 
                 else:
                     properties['child_denies'] = 0
@@ -371,8 +374,11 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                     properties['support_percentage'] = 0
                     properties['denies_percentage'] = 0
                     properties['queries_percentage'] = 0
-                    #properties['follower_count'] = 0
-                    #properties['favorite_count'] = 0
+                    properties['comment_fav_sum'] = 0
+                    properties['support_fav_sum'] = 0
+                    properties['query_fav_sum'] = 0
+                    properties['deny_fav_sum'] = 0
+                    properties['follower_count'] = 0
 
 
             for detail in TWEET_DETAILS:
