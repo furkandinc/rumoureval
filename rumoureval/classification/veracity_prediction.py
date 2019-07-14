@@ -192,14 +192,35 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                     ('vect', DictVectorizer()),
                 ])),
 
+                ('query_fw_sum', Pipeline([
+                    ('selector', ItemSelector(keys='query_fw_sum')),
+                    ('count', FeatureCounter(names='query_fw_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('comment_fw_sum', Pipeline([
+                    ('selector', ItemSelector(keys='comment_fw_sum')),
+                    ('count', FeatureCounter(names='comment_fw_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('support_fw_sum', Pipeline([
+                    ('selector', ItemSelector(keys='support_fw_sum')),
+                    ('count', FeatureCounter(names='support_fw_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('deny_fw_sum', Pipeline([
+                    ('selector', ItemSelector(keys='deny_fw_sum')),
+                    ('count', FeatureCounter(names='deny_fw_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
                 ('retweet_count', Pipeline([
                     ('selector', ItemSelector(keys='retweet_count')),
                     ('count', FeatureCounter(names='retweet_count')),
                     ('vect', DictVectorizer()),
                 ])),
-
-
-
 
                 # Boolean features
                 ('verified', Pipeline([
@@ -252,6 +273,10 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                 'query_rt_sum': 1.0,
                 'comment_rt_sum': 1.0,
                 'support_rt_sum': 1.0,
+                'deny_fw_sum': 1.0,
+                'query_fw_sum': 1.0,
+                'comment_fw_sum': 1.0,
+                'support_fw_sum': 1.0,
 
             },
         )),
