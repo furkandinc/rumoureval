@@ -25,7 +25,7 @@ for reference_id in truth_values.keys():
 	else:
 		print('unmatched entry:', reference_id, '-- no reference value for this document')
 
-score = correct / total
+score = float(correct) / total
 
 print(observed, 'matched entries in submission')
 print(total, 'entries in reference file')

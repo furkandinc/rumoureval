@@ -81,7 +81,7 @@ def filter_tweets(tweets, filter_short=False, similarity_threshold=0.9):
     return filtered_tweets
 
 
-def sdqc(tweets_train, tweets_eval, train_annotations, eval_annotations, use_cache, plot):
+def sdqc(tweets_train, tweets_eval, train_annotations, eval_annotations, use_cache, plot,all_tweets):
     """
     Classify tweets into one of four categories - support (s), deny (d), query(q), comment (c).
 
@@ -122,13 +122,13 @@ def sdqc(tweets_train, tweets_eval, train_annotations, eval_annotations, use_cac
     LOGGER.info('Initializing pipeline')
 
     LOGGER.info('Query pipeline')
-    query_pipeline = build_query_pipeline()
+    query_pipeline = build_query_pipeline(all_tweets)
     query_annotations = generate_one_vs_rest_annotations(train_annotations, 'query')
     eval_annotations_query = generate_one_vs_rest_annotations(eval_annotations, 'query')
     LOGGER.info(query_pipeline)
 
     LOGGER.info('Base pipeline')
-    base_pipeline = build_base_pipeline()
+    base_pipeline = build_base_pipeline(all_tweets)
     LOGGER.info(base_pipeline)
 
     y_train_base = [train_annotations[x['id_str']] for x in tweets_train]
@@ -249,11 +249,11 @@ def generate_one_vs_rest_annotations(annotations, one):
     return one_vs_rest_annotations
 
 
-def build_query_pipeline():
+def build_query_pipeline(all_tweets):
     """Build a pipeline for predicting if a tweet is classified as query or not."""
     return Pipeline([
         # Extract useful features from tweets
-        ('extract_tweets', TweetDetailExtractor(task='A', strip_hashtags=False, strip_mentions=False)),
+        ('extract_tweets', TweetDetailExtractor(task='A', strip_hashtags=False, strip_mentions=False,all_tweets=all_tweets)),
 
         # Combine processing of features
         ('union', FeatureUnion(
@@ -330,11 +330,11 @@ def build_query_pipeline():
     ])
 
 
-def build_base_pipeline():
+def build_base_pipeline(all_tweets):
     """Build a pipeline for predicting all 4 SDQC classes."""
     return Pipeline([
         # Extract useful features from tweets
-        ('extract_tweets', TweetDetailExtractor(task='A', strip_hashtags=False, strip_mentions=False)),
+        ('extract_tweets', TweetDetailExtractor(task='A', strip_hashtags=False, strip_mentions=False,all_tweets = all_tweets)),
 
         # Combine processing of features
         ('union', FeatureUnion(

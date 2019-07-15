@@ -43,6 +43,14 @@ def main(args=None):
     # Import training and evaluation datasets
     tweets_train = import_data('train')
     tweets_eval = import_data(eval_datasource)
+    all_tweets = { }
+
+    for val in tweets_train:
+        all_tweets[str(val['id'])] = val
+
+    for val in tweets_eval:
+        all_tweets[str(val['id'])] = val
+
 
     # Import annotation data for training and evaluation datasets
     train_annotations = import_annotation_data('train')
@@ -64,7 +72,8 @@ def main(args=None):
                           train_annotations[0],
                           eval_annotations[0],
                           not parsed_args.disable_cache,
-                          parsed_args.plot)
+                          parsed_args.plot,
+                          all_tweets)
 
     # Perform veracity prediction task
     task_b_results = veracity_prediction(root_tweets_train,
@@ -72,7 +81,8 @@ def main(args=None):
                                          train_annotations[1],
                                          eval_annotations[1],
                                          task_a_results,
-                                         parsed_args.plot)
+                                         parsed_args.plot,
+                                         all_tweets)
 
     # Score tasks and output results
     task_a_scorer = Scorer('A', eval_datasource)
