@@ -56,6 +56,13 @@ def main(args=None):
     train_annotations = import_annotation_data('train')
     eval_annotations = import_annotation_data(eval_datasource)
 
+    all_a_annotation = { }
+    for x, y in train_annotations[0].items():
+        all_a_annotation[x] = y
+    
+    for x, y in eval_annotations[0].items():
+        all_a_annotation[x] = y
+
     # Get the root tweets for each dataset for veracity prediction
     root_tweets_train = [x for x in tweets_train if x.is_source]
     root_tweets_eval = [x for x in tweets_eval if x.is_source]
@@ -80,7 +87,7 @@ def main(args=None):
                                          root_tweets_eval,
                                          train_annotations[1],
                                          eval_annotations[1],
-                                         task_a_results,
+                                         all_a_annotation,
                                          parsed_args.plot,
                                          all_tweets)
 

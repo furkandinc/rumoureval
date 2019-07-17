@@ -100,6 +100,8 @@ TWEET_DETAILS = [
     ('query_fw_sum', int),
     ('comment_fw_sum', int),
     ('support_fw_sum', int),
+    ('support_link_sum', int),
+    ('deny_link_sum', int),
 ]
 
 class TweetDetailExtractor(BaseEstimator, TransformerMixin):
@@ -357,6 +359,9 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                 properties['support_fw_sum'] = 0
                 properties['comment_fw_sum'] = 0
 
+                properties['deny_link_sum'] = 0
+                properties['support_link_sum'] = 0
+
                 if self._task == 'B':
                     denies = [tweet for tweet in self._classifications if self._classifications[tweet] == 'deny']
                     queries = [tweet for tweet in self._classifications if self._classifications[tweet] == 'query']
@@ -371,6 +376,7 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                         properties['deny_fav_sum'] += self._tweets[twit]['favorite_count']
                         properties['deny_rt_sum'] += self._tweets[twit]['retweet_count']
                         properties['deny_fw_sum'] += self._tweets[twit]['user']['followers_count']
+                        properties['deny_link_sum'] += len(self._tweets[twit]['entities']['urls'])
                     for twit in queries:
                         properties['query_fav_sum'] +=  self._tweets[twit]['favorite_count']
                         properties['query_rt_sum'] += self._tweets[twit]['retweet_count']
@@ -379,6 +385,7 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                         properties['support_fav_sum'] +=  self._tweets[twit]['favorite_count']
                         properties['support_rt_sum'] += self._tweets[twit]['retweet_count']
                         properties['support_fw_sum'] += self._tweets[twit]['user']['followers_count']
+                        properties['support_link_sum'] += len(self._tweets[twit]['entities']['urls'])
                     for twit in comments:
                         properties['comment_fav_sum'] +=  self._tweets[twit]['favorite_count']
                         properties['comment_rt_sum'] += self._tweets[twit]['retweet_count']

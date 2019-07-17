@@ -87,7 +87,7 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
     LOGGER.info('Initializing pipeline')
     pipeline = Pipeline([
         # Extract useful features from tweets
-        ('extract_tweets', TweetDetailExtractor(task='B', strip_hashtags=False, strip_mentions=False, classifications=task_a_results,all_tweets=all_tweets)),
+        ('extract_tweets', TweetDetailExtractor(task='B', strip_hashtags=False, strip_mentions=False, classifications=task_a_results, all_tweets=all_tweets)),
 
         # Combine processing of features
         ('union', FeatureUnion(
@@ -216,6 +216,18 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                     ('vect', DictVectorizer()),
                 ])),
 
+                ('deny_link_sum', Pipeline([
+                    ('selector', ItemSelector(keys='deny_link_sum')),
+                    ('count', FeatureCounter(names='deny_link_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
+                ('support_link_sum', Pipeline([
+                    ('selector', ItemSelector(keys='support_link_sum')),
+                    ('count', FeatureCounter(names='support_link_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
+
                 ('retweet_count', Pipeline([
                     ('selector', ItemSelector(keys='retweet_count')),
                     ('count', FeatureCounter(names='retweet_count')),
@@ -277,6 +289,8 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                 'query_fw_sum': 1.0,
                 'comment_fw_sum': 1.0,
                 'support_fw_sum': 1.0,
+                'support_link_sum': 1.0,
+                'deny_link_sum': 1.0,
 
             },
         )),
