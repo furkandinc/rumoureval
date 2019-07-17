@@ -155,7 +155,7 @@ def import_thread(folder):
     return thread
 
 
-def import_tweet_data(folder):
+def import_tweet_data(folder, subfolders):
     """
     Imports raw tweet data from the given folder, recursively.
 
@@ -180,9 +180,11 @@ def import_tweet_data(folder):
         tweet_data.append(import_thread(folder))
     else:
         for child in children:
-            child_data = import_tweet_data(os.path.join(folder, child))
-            if child_data is not None:
-                tweet_data += child_data
+            if(child in subfolders or child.isdigit()):
+                child_data = import_tweet_data(os.path.join(folder, child), subfolders)
+                if child_data is not None:
+                    tweet_data += child_data
+
 
     tweet_data = filter_none(tweet_data)
     return tweet_data
@@ -251,7 +253,7 @@ def build_tweet(tweet_data, tweet_id, structure, is_source=False):
     return None
 
 
-def import_data(datasource):
+def import_data(datasource, *subfolders):
     """
     Imports raw tweet data from the specified data source, to be parsed later.
 
@@ -266,7 +268,7 @@ def import_data(datasource):
     LOGGER.info('Beginning `%s` data import', datasource)
     start_time = time()
     source_folder = get_datasource_path(datasource)
-    tweet_data = import_tweet_data(source_folder)
+    tweet_data = import_tweet_data(source_folder, list(subfolders)[0])
 
     parsed_tweets = [
         build_tweet(

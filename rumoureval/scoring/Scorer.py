@@ -14,7 +14,6 @@ LOGGER = logging.getLogger()
 _SCORER_PATH = os.path.join(get_script_path(), '..', 'scorer')
 _DEBUG_REGEX = re.compile(r'^((un)?match(ed|ing)|\d+( matched)? entries)')
 
-
 class Scorer(object):
     """
     Accepts the results of a RumourEval implementation, runs scoring scripts,

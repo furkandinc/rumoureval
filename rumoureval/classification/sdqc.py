@@ -81,7 +81,7 @@ def filter_tweets(tweets, filter_short=False, similarity_threshold=0.9):
     return filtered_tweets
 
 
-def sdqc(tweets_train, tweets_eval, train_annotations, eval_annotations, use_cache, plot,all_tweets):
+def sdqc(tweets_train, tweets_eval, annotations, plot, all_tweets):
     """
     Classify tweets into one of four categories - support (s), deny (d), query(q), comment (c).
 
@@ -97,14 +97,6 @@ def sdqc(tweets_train, tweets_eval, train_annotations, eval_annotations, use_cac
         sqdc task annotations for training data
     :type train_annotations:
         `dict
-    :param eval_annotations:
-        sqdc task annotations for evaluation data
-    :type eval_annotations:
-        `dict`
-    :param use_cache:
-        true to enable using cached classifier
-    :type use_cache:
-        `bool`
     :param plot:
         true to plot confusion matrix
     :type plot:
@@ -123,36 +115,28 @@ def sdqc(tweets_train, tweets_eval, train_annotations, eval_annotations, use_cac
 
     LOGGER.info('Query pipeline')
     query_pipeline = build_query_pipeline(all_tweets)
-    query_annotations = generate_one_vs_rest_annotations(train_annotations, 'query')
-    eval_annotations_query = generate_one_vs_rest_annotations(eval_annotations, 'query')
+    query_annotations = generate_one_vs_rest_annotations(annotations, 'query')
+    eval_annotations_query = generate_one_vs_rest_annotations(annotations, 'query')
     LOGGER.info(query_pipeline)
 
     LOGGER.info('Base pipeline')
     base_pipeline = build_base_pipeline(all_tweets)
     LOGGER.info(base_pipeline)
 
-    y_train_base = [train_annotations[x['id_str']] for x in tweets_train]
+    y_train_base = [annotations[x['id_str']] for x in tweets_train]
     y_train_query = [query_annotations[x['id_str']] for x in tweets_train]
-    y_eval_base = [eval_annotations[x['id_str']] for x in tweets_eval]
+    y_eval_base = [annotations[x['id_str']] for x in tweets_eval]
     y_eval_query = [eval_annotations_query[x['id_str']] for x in tweets_eval]
 
     LOGGER.info('Beginning training')
 
     # Training on tweets_train
     start_time = time()
-    if use_cache and os.path.exists(os.path.join(get_output_path(), 'base_pipeline.pickle')):
-        base_pipeline = joblib.load(os.path.join(get_output_path(), 'base_pipeline.pickle'))
-    else:
-        base_pipeline.fit(tweets_train, y_train_base)
-        joblib.dump(base_pipeline, os.path.join(get_output_path(), 'base_pipeline.pickle'))
+    base_pipeline.fit(tweets_train, y_train_base)
     LOGGER.info("base_pipeline training:  %0.3fs", time() - start_time)
 
     start_time = time()
-    if use_cache and os.path.exists(os.path.join(get_output_path(), 'query_pipeline.pickle')):
-        query_pipeline = joblib.load(os.path.join(get_output_path(), 'query_pipeline.pickle'))
-    else:
-        query_pipeline.fit(tweets_train, y_train_query)
-        joblib.dump(query_pipeline, os.path.join(get_output_path(), 'query_pipeline.pickle'))
+    query_pipeline.fit(tweets_train, y_train_query)
     LOGGER.info("query_pipeline training: %0.3fs", time() - start_time)
 
     LOGGER.info("")

@@ -46,7 +46,7 @@ def filter_tweets(tweets, annotations):
     return filtered_tweets
 
 
-def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annotations, task_a_results, plot,all_tweets):
+def veracity_prediction(tweets_train, tweets_eval, a_annotations, b_annotations, plot,all_tweets):
     """
     Predict the veracity of tweets.
 
@@ -82,12 +82,12 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
     LOGGER.info('Beginning Veracity Prediction Task (Task B)')
 
     LOGGER.info('Filter tweets from training set')
-    tweets_train = filter_tweets(tweets_train, train_annotations)
+    tweets_train = filter_tweets(tweets_train, b_annotations)
 
     LOGGER.info('Initializing pipeline')
     pipeline = Pipeline([
         # Extract useful features from tweets
-        ('extract_tweets', TweetDetailExtractor(task='B', strip_hashtags=False, strip_mentions=False, classifications=task_a_results, all_tweets=all_tweets)),
+        ('extract_tweets', TweetDetailExtractor(task='B', strip_hashtags=False, strip_mentions=False, classifications=a_annotations, all_tweets=all_tweets)),
 
         # Combine processing of features
         ('union', FeatureUnion(
@@ -291,7 +291,6 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
                 'support_fw_sum': 1.0,
                 'support_link_sum': 1.0,
                 'deny_link_sum': 1.0,
-
             },
         )),
 
@@ -303,8 +302,8 @@ def veracity_prediction(tweets_train, tweets_eval, train_annotations, eval_annot
         ])
     LOGGER.info(pipeline)
 
-    y_train = [train_annotations[x['id_str']] for x in tweets_train]
-    y_eval = [eval_annotations[x['id_str']] for x in tweets_eval]
+    y_train = [b_annotations[x['id_str']] for x in tweets_train]
+    y_eval = [b_annotations[x['id_str']] for x in tweets_eval]
 
     # Training on tweets_train
     start_time = time()
