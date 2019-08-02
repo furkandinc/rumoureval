@@ -444,22 +444,22 @@ def build_base_pipeline(all_tweets):
 
             # Relative weights of transformations
             transformer_weights={
-                'tweet_text': 1.0,
+                'tweet_text': 1.0, 
 
                 'verified': 0.5,
                 'is_news': 5.0,
                 'is_root': 20.0,
-                'ends_with_question': 10.0,
+                'ends_with_question': 10.0, 
 
                 'count_periods': 0.5,
-                'count_question_marks': 0.5,
+                'count_question_marks': 0.5, 
                 'count_exclamations': 0.5,
                 'count_chars': 0.5,
 
-                'count_hashtags': 0.5,
+                'count_hashtags': 0.5, 
                 'count_mentions': 0.5,
-                'count_retweets': 0.5,
-                'count_depth': 0.5,
+                'count_retweets': 0.5, 
+                'count_depth': 0.5, 
 
                 'pos_neg_sentiment': 1.0,
                 'denying_words': 1.0,

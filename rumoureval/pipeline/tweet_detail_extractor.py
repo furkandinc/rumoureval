@@ -86,20 +86,20 @@ TWEET_DETAILS = [
     ('support_percentage', float),
     ('denies_percentage', float),
     ('queries_percentage', float),
-	#('favorite_count', int),
-    #('follower_count', int),
-    # ('deny_fav_sum', int),
-    # ('query_fav_sum', int),
-    # ('comment_fav_sum', int),
-    # ('support_fav_sum', int),
-    # ('deny_rt_sum', int),
-    # ('query_rt_sum', int),
-    # ('comment_rt_sum', int),
-    # ('support_rt_sum', int),
-    # ('deny_fw_sum', int),
-    # ('query_fw_sum', int),
-    # ('comment_fw_sum', int),
-    # ('support_fw_sum', int),
+	('favorite_count', int),
+    ('follower_count', int),
+    ('deny_fav_sum', int),
+    ('query_fav_sum', int),
+    ('comment_fav_sum', int),
+    ('support_fav_sum', int),
+    ('deny_rt_sum', int),
+    ('query_rt_sum', int),
+    ('comment_rt_sum', int),
+    ('support_rt_sum', int),
+    ('deny_fw_sum', int),
+    ('query_fw_sum', int),
+    ('comment_fw_sum', int),
+    ('support_fw_sum', int),
     ('support_link_sum', int),
     ('deny_link_sum', int),
 ]
@@ -344,22 +344,22 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                 properties['personal_words'] = [
                     word for word in stemmed if word in STEMMED_LEXICON['personal']
                     ]
-                #properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
-                #properties['follower_count'] = tweet['user']['followers_count'] if 'user' in tweet else 0
-                # properties['deny_fav_sum'] = 0
-                # properties['query_fav_sum'] = 0
-                # properties['support_fav_sum'] = 0
-                # properties['comment_fav_sum'] = 0
+                properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
+                properties['follower_count'] = tweet['user']['followers_count'] if 'user' in tweet else 0
+                properties['deny_fav_sum'] = 0
+                properties['query_fav_sum'] = 0
+                properties['support_fav_sum'] = 0
+                properties['comment_fav_sum'] = 0
 
-                # properties['deny_rt_sum'] = 0
-                # properties['query_rt_sum'] = 0
-                # properties['support_rt_sum'] = 0
-                # properties['comment_rt_sum'] = 0
+                properties['deny_rt_sum'] = 0
+                properties['query_rt_sum'] = 0
+                properties['support_rt_sum'] = 0
+                properties['comment_rt_sum'] = 0
 
-                # properties['deny_fw_sum'] = 0
-                # properties['query_fw_sum'] = 0
-                # properties['support_fw_sum'] = 0
-                # properties['comment_fw_sum'] = 0
+                properties['deny_fw_sum'] = 0
+                properties['query_fw_sum'] = 0
+                properties['support_fw_sum'] = 0
+                properties['comment_fw_sum'] = 0
 
                 properties['deny_link_sum'] = 0
                 properties['support_link_sum'] = 0
@@ -375,23 +375,23 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                     properties['child_supports'] = len(supports)
 
                     for twit in denies:
-                        # properties['deny_fav_sum'] += self._tweets[twit]['favorite_count']
-                        # properties['deny_rt_sum'] += self._tweets[twit]['retweet_count']
-                        # properties['deny_fw_sum'] += self._tweets[twit]['user']['followers_count']
+                        properties['deny_fav_sum'] += self._tweets[twit]['favorite_count']
+                        properties['deny_rt_sum'] += self._tweets[twit]['retweet_count']
+                        properties['deny_fw_sum'] += self._tweets[twit]['user']['followers_count']
                         properties['deny_link_sum'] += len(self._tweets[twit]['entities']['urls'])
-                    # for twit in queries:
-                        # properties['query_fav_sum'] +=  self._tweets[twit]['favorite_count']
-                        # properties['query_rt_sum'] += self._tweets[twit]['retweet_count']
-                        # properties['query_fw_sum'] += self._tweets[twit]['user']['followers_count']
+                    for twit in queries:
+                        properties['query_fav_sum'] +=  self._tweets[twit]['favorite_count']
+                        properties['query_rt_sum'] += self._tweets[twit]['retweet_count']
+                        properties['query_fw_sum'] += self._tweets[twit]['user']['followers_count']
                     for twit in supports:
-                        # properties['support_fav_sum'] +=  self._tweets[twit]['favorite_count']
-                        # properties['support_rt_sum'] += self._tweets[twit]['retweet_count']
-                        # properties['support_fw_sum'] += self._tweets[twit]['user']['followers_count']
+                        properties['support_fav_sum'] +=  self._tweets[twit]['favorite_count']
+                        properties['support_rt_sum'] += self._tweets[twit]['retweet_count']
+                        properties['support_fw_sum'] += self._tweets[twit]['user']['followers_count']
                         properties['support_link_sum'] += len(self._tweets[twit]['entities']['urls'])
-                    # for twit in comments:
-                        # properties['comment_fav_sum'] +=  self._tweets[twit]['favorite_count']
-                        # properties['comment_rt_sum'] += self._tweets[twit]['retweet_count']
-                        # properties['comment_fw_sum'] += self._tweets[twit]['user']['followers_count']
+                    for twit in comments:
+                        properties['comment_fav_sum'] +=  self._tweets[twit]['favorite_count']
+                        properties['comment_rt_sum'] += self._tweets[twit]['retweet_count']
+                        properties['comment_fw_sum'] += self._tweets[twit]['user']['followers_count']
 
 
 
@@ -400,7 +400,7 @@ class TweetDetailExtractor(BaseEstimator, TransformerMixin):
                     properties['denies_percentage'] = properties['child_denies'] / total_sdq_tweets
                     properties['queries_percentage'] = properties['child_queries'] / total_sdq_tweets
                     properties['retweet_count'] = tweet['retweet_count'] if 'retweet_count' in tweet else 0
-                    #properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
+                    properties['favorite_count'] = tweet['favorite_count'] if 'favorite_count' in tweet else 0
 
                 else:
                     properties['child_denies'] = 0

@@ -131,89 +131,89 @@ def veracity_prediction(tweets_train, tweets_eval, a_annotations, b_annotations,
                     ('vect', DictVectorizer()),
                 ])),
 
-                # ('follower_count',Pipeline([
-                    # ('selector',ItemSelector(keys ='follower_count')),
-                    # ('count', FeatureCounter(names ='follower_count')),
-                    # ('vect',DictVectorizer()),
-                # ])),
+                ('follower_count',Pipeline([
+                    ('selector',ItemSelector(keys ='follower_count')),
+                    ('count', FeatureCounter(names ='follower_count')),
+                    ('vect',DictVectorizer()),
+                ])),
 
-                # ('favorite_count', Pipeline([
-                    # ('selector', ItemSelector(keys='favorite_count')),
-                    # ('count', FeatureCounter(names='favorite_count')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('favorite_count', Pipeline([
+                    ('selector', ItemSelector(keys='favorite_count')),
+                    ('count', FeatureCounter(names='favorite_count')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('deny_fav_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='deny_fav_sum')),
-                    # ('count', FeatureCounter(names='deny_fav_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('deny_fav_sum', Pipeline([
+                    ('selector', ItemSelector(keys='deny_fav_sum')),
+                    ('count', FeatureCounter(names='deny_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('support_fav_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='support_fav_sum')),
-                    # ('count', FeatureCounter(names='support_fav_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('support_fav_sum', Pipeline([
+                    ('selector', ItemSelector(keys='support_fav_sum')),
+                    ('count', FeatureCounter(names='support_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('query_fav_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='query_fav_sum')),
-                    # ('count', FeatureCounter(names='query_fav_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('query_fav_sum', Pipeline([
+                    ('selector', ItemSelector(keys='query_fav_sum')),
+                    ('count', FeatureCounter(names='query_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('comment_fav_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='comment_fav_sum')),
-                    # ('count', FeatureCounter(names='comment_fav_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('comment_fav_sum', Pipeline([
+                    ('selector', ItemSelector(keys='comment_fav_sum')),
+                    ('count', FeatureCounter(names='comment_fav_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('comment_rt_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='comment_rt_sum')),
-                    # ('count', FeatureCounter(names='comment_rt_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('comment_rt_sum', Pipeline([
+                    ('selector', ItemSelector(keys='comment_rt_sum')),
+                    ('count', FeatureCounter(names='comment_rt_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('query_rt_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='query_rt_sum')),
-                    # ('count', FeatureCounter(names='query_rt_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('query_rt_sum', Pipeline([
+                    ('selector', ItemSelector(keys='query_rt_sum')),
+                    ('count', FeatureCounter(names='query_rt_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('deny_rt_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='deny_rt_sum')),
-                    # ('count', FeatureCounter(names='deny_rt_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('deny_rt_sum', Pipeline([
+                    ('selector', ItemSelector(keys='deny_rt_sum')),
+                    ('count', FeatureCounter(names='deny_rt_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('support_rt_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='support_rt_sum')),
-                    # ('count', FeatureCounter(names='support_rt_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('support_rt_sum', Pipeline([
+                    ('selector', ItemSelector(keys='support_rt_sum')),
+                    ('count', FeatureCounter(names='support_rt_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('query_fw_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='query_fw_sum')),
-                    # ('count', FeatureCounter(names='query_fw_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('query_fw_sum', Pipeline([
+                    ('selector', ItemSelector(keys='query_fw_sum')),
+                    ('count', FeatureCounter(names='query_fw_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('comment_fw_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='comment_fw_sum')),
-                    # ('count', FeatureCounter(names='comment_fw_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('comment_fw_sum', Pipeline([
+                    ('selector', ItemSelector(keys='comment_fw_sum')),
+                    ('count', FeatureCounter(names='comment_fw_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('support_fw_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='support_fw_sum')),
-                    # ('count', FeatureCounter(names='support_fw_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('support_fw_sum', Pipeline([
+                    ('selector', ItemSelector(keys='support_fw_sum')),
+                    ('count', FeatureCounter(names='support_fw_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
-                # ('deny_fw_sum', Pipeline([
-                    # ('selector', ItemSelector(keys='deny_fw_sum')),
-                    # ('count', FeatureCounter(names='deny_fw_sum')),
-                    # ('vect', DictVectorizer()),
-                # ])),
+                ('deny_fw_sum', Pipeline([
+                    ('selector', ItemSelector(keys='deny_fw_sum')),
+                    ('count', FeatureCounter(names='deny_fw_sum')),
+                    ('vect', DictVectorizer()),
+                ])),
 
                 ('deny_link_sum', Pipeline([
                     ('selector', ItemSelector(keys='deny_link_sum')),
@@ -274,20 +274,20 @@ def veracity_prediction(tweets_train, tweets_eval, a_annotations, b_annotations,
                 'verified': 1.0,
                 'is_root': 1.5,
                 'has_url': 1.0,
-                #'follower_count': 1.0,
-                #'favorite_count':1.0,
-                # 'deny_fav_sum':1.0,
-                # 'query_fav_sum':1.0,
-                # 'comment_fav_sum':1.0,
-                # 'support_fav_sum':1.0,
-                # 'deny_rt_sum': 1.0,
-                # 'query_rt_sum': 1.0,
-                # 'comment_rt_sum': 1.0,
-                # 'support_rt_sum': 1.0,
-                # 'deny_fw_sum': 1.0,
-                # 'query_fw_sum': 1.0,
-                # 'comment_fw_sum': 1.0,
-                # 'support_fw_sum': 1.0,
+                'follower_count': 1.0,
+                'favorite_count':1.0,
+                'deny_fav_sum':1.0,
+                'query_fav_sum':1.0,
+                'comment_fav_sum':1.0,
+                'support_fav_sum':1.0,
+                'deny_rt_sum': 1.0,
+                'query_rt_sum': 1.0,
+                'comment_rt_sum': 1.0,
+                'support_rt_sum': 1.0,
+                'deny_fw_sum': 1.0,
+                'query_fw_sum': 1.0,
+                'comment_fw_sum': 1.0,
+                'support_fw_sum': 1.0,
                 'support_link_sum': 1.0,
                 'deny_link_sum': 1.0,
             },
@@ -296,7 +296,9 @@ def veracity_prediction(tweets_train, tweets_eval, a_annotations, b_annotations,
         ('scaler', StandardScaler(with_mean=False)),
 
         # Use a classifier on the result
-        ('classifier', SVC(kernel='rbf', class_weight='balanced', probability=True))
+        ('classifier', SVC(C=0.00001, cache_size=2000, class_weight=None, coef0=0.001, decision_function_shape='ovo', degree=2, gamma='auto', kernel='rbf', probability=True, tol=0.001, shrinking=True, verbose=False))
+        # ('classifier', SVC(kernel='poly', probability=True))
+        #('classifier', SVC(kernel='rbf', class_weight='balanced', probability=True))
 
         ])
     LOGGER.info(pipeline)
@@ -314,28 +316,28 @@ def veracity_prediction(tweets_train, tweets_eval, a_annotations, b_annotations,
     predictions = pipeline.predict(tweets_eval)
     confidence = pipeline.predict_proba(tweets_eval)
     LOGGER.debug("eval time:  %0.3fs", time() - start_time)
-
+    # LOGGER.info(predictions)
     # Print misclassified tweets
-    LOGGER.debug('============================================================')
-    LOGGER.debug('|                                                          |')
-    LOGGER.debug('|                      Misclassified                       |')
-    LOGGER.debug('|                                                          |')
-    LOGGER.debug('============================================================')
-    for i, prediction in enumerate(predictions):
-        if prediction != y_eval[i]:
-            LOGGER.debug('--------------------\n{}\n{}\n{}\n{}'.format(
-                y_eval[i],
-                prediction,
-                confidence[i],
-                TweetDetailExtractor.get_parseable_tweet_text(tweets_eval[i])
-                ))
+    # LOGGER.debug('============================================================')
+    # LOGGER.debug('|                                                          |')
+    # LOGGER.debug('|                      Misclassified                       |')
+    # LOGGER.debug('|                                                          |')
+    # LOGGER.debug('============================================================')
+    # for i, prediction in enumerate(predictions):
+        # if prediction != y_eval[i]:
+            # LOGGER.debug('--------------------\n{}\n{}\n{}\n{}'.format(
+                # y_eval[i],
+                # prediction,
+                # confidence[i],
+                # TweetDetailExtractor.get_parseable_tweet_text(tweets_eval[i])
+                # ))
 
     # Outputting classifier results
-    LOGGER.debug("accuracy:   %0.3f", metrics.accuracy_score(y_eval, predictions))
-    LOGGER.info("\nclassification report:")
-    LOGGER.info(metrics.classification_report(y_eval, predictions, target_names=CLASSES))
-    LOGGER.info("confusion matrix:")
-    LOGGER.info(metrics.confusion_matrix(y_eval, predictions))
+    # LOGGER.debug("accuracy:   %0.3f", metrics.accuracy_score(y_eval, predictions))
+    # LOGGER.info("\nclassification report:")
+    # LOGGER.info(metrics.classification_report(y_eval, predictions, target_names=CLASSES))
+    # LOGGER.info("confusion matrix:")
+    # LOGGER.info(metrics.confusion_matrix(y_eval, predictions))
 
     if plot:
         cm = metrics.confusion_matrix(y_eval, predictions)
