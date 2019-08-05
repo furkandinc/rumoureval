@@ -9,11 +9,12 @@
 
 - `pip install -r requirements.txt` to install Python library dependencies
 
-### Running the code
 
-#### Recommended
-Do `python3 -m rumoureval --ova` to run on one versus all data.
+#### Execute this command for prediction from folder
+`python3 -m rumoureval --predict [folder_name]`  change `[folder_name]` to one of the following "test1, test2"
 
-#### Arguments
+ 
+ 
 
-`python3 -m rumoureval [--ova]`
+
+

@@ -1,5 +1,6 @@
 """Package for predicting veracity of tweets."""
 
+import pickle
 import logging
 from time import time
 import numpy as np
@@ -45,38 +46,37 @@ def filter_tweets(tweets, annotations):
 
     return filtered_tweets
 
-
-def veracity_prediction(tweets_train, tweets_eval, a_annotations, b_annotations, plot,all_tweets):
+def veracity_train(tweets_train, a_annotations, b_annotations, plot, all_tweets):
     """
-    Predict the veracity of tweets.
-
-    :param tweets_train:
+        Predict the veracity of tweets.
+        
+        :param tweets_train:
         set of twitter threads to train model on
-    :type tweets_train:
+        :type tweets_train:
         `list` of :class:`Tweet`
-    :param tweets_eval:
+        :param tweets_eval:
         set of twitter threads to evaluate model on
-    :type tweets_eval:
+        :type tweets_eval:
         `list` of :class:`Tweet`
-    :param train_annotations:
+        :param train_annotations:
         veracity prediction task annotations for training data
-    :type train_annotations:
+        :type train_annotations:
         `list` of `str`
-    :param eval_annotations:
+        :param eval_annotations:
         veracity prediction task annotations for evaluation data
-    :type eval_annotations:
+        :type eval_annotations:
         `list` of `str`
-    :param task_a_results:
+        :param task_a_results:
         classification results from task A
-    :type task_a_results:
+        :type task_a_results:
         `dict`
-    :param plot:
+        :param plot:
         true to plot confusion matrix
-    :type plot:
+        :type plot:
         `bool`
-    :rtype:
+        :rtype:
         `dict`
-    """
+        """
     # pylint:disable=too-many-locals
     LOGGER.info(get_log_separator())
     LOGGER.info('Beginning Veracity Prediction Task (Task B)')
@@ -304,13 +304,18 @@ def veracity_prediction(tweets_train, tweets_eval, a_annotations, b_annotations,
     LOGGER.info(pipeline)
 
     y_train = [b_annotations[x['id_str']] for x in tweets_train]
-    y_eval = [b_annotations[x['id_str']] for x in tweets_eval]
 
     # Training on tweets_train
     start_time = time()
     pipeline.fit(tweets_train, y_train)
     LOGGER.debug("train time: %0.3fs", time() - start_time)
+    filehandler = open('model.obj', 'wb')
+    pickle.dump(pipeline, filehandler)
 
+def veracity_predict(tweets_eval, a_annotations, b_annotations, plot):
+    filehandler = open('model.obj', 'rb')
+    pipeline = pickle.load(filehandler)
+    y_eval = [b_annotations[x['id_str']] for x in tweets_eval]
     # Predicting classes for tweets_eval
     start_time = time()
     predictions = pipeline.predict(tweets_eval)
